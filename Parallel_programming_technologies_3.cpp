@@ -6,14 +6,14 @@
 using namespace std;
 
 int q;
-const int N = 500;
+const int N = 100;
 double start_time, end_time;
 float A[N][N], B[N][N], C[N][N], c;
 
 int main() {
 	setlocale(LC_ALL, "Russian");
 
-	cout << "Ââåäèòå êîëè÷åñòâî ïîâòîðîâ óìíîæåíèÿ = ";
+	cout << "Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ ÐºÐ¾Ð»Ð¸Ñ‡ÐµÑÑ‚Ð²Ð¾ Ð¿Ð¾Ð²Ñ‚Ð¾Ñ€Ð¾Ð² ÑƒÐ¼Ð½Ð¾Ð¶ÐµÐ½Ð¸Ñ          = ";
 	cin >> q;
 	cout << endl;
 
@@ -26,7 +26,9 @@ int main() {
 		}
 	}
 
-		
+
+
+	// ÐŸÐ¾ÑÐ»ÐµÐ´Ð¾Ð²Ð°Ñ‚ÐµÐ»ÑŒÐ½Ñ‹Ð¹ Ð°Ð»Ð³Ð¾Ñ€Ð¸Ñ‚Ð¼ //
 	
 	c = 0;
 	start_time = omp_get_wtime();
@@ -50,10 +52,12 @@ int main() {
 		for (int j = 0; j < N; j++)
 			c += C[i][j] * C[i][j];
 
-	cout << "Ðåçóëüòàò áåç àëãîðèòìà               = " << c << endl;
-	cout << "Âðåìÿ âûïîëíåíèÿ áåç àëãîðèòìà        = " << end_time - start_time << "\n\n";
+	cout << "Ð ÐµÐ·ÑƒÐ»ÑŒÑ‚Ð°Ñ‚ Ð±ÐµÐ· Ð°Ð»Ð³Ð¾Ñ€Ð¸Ñ‚Ð¼Ð°                        = " << c << endl;
+	cout << "Ð’Ñ€ÐµÐ¼Ñ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ñ Ð±ÐµÐ· Ð°Ð»Ð³Ð¾Ñ€Ð¸Ñ‚Ð¼Ð°                 = " << end_time - start_time << "\n\n";
 	
+
 	
+	// ÐÐ»Ð³Ð¾Ñ€Ð¸Ñ‚Ð¼ 1 //
 	
 	c = 0;
 	start_time = omp_get_wtime();
@@ -62,7 +66,7 @@ int main() {
 			for (int j = 0; j < N; j++) {
 				float sum = 0;
 
-#pragma omp parallel reduction(+:sum) num_threads(4) 
+#pragma omp parallel reduction(+:sum) num_threads(8) 
 				{
 #pragma omp for
 
@@ -74,25 +78,25 @@ int main() {
 				C[i][j] = sum;
 			}
 		}
-	}	
-	
+	}
 	end_time = omp_get_wtime();
 
-	for (int i = 0; i < N; i++) 
-		for (int j = 0; j < N; j++) 
+	for (int i = 0; i < N; i++)
+		for (int j = 0; j < N; j++)
 			c += C[i][j] * C[i][j];
-		
 
-	cout << "Ðåçóëüòàò àëãîðèòìà 1                 = " << c << endl;
-	cout << "Âðåìÿ âûïîëíåíèÿ àëãîðèòìà 1          = " << end_time - start_time << "\n\n";
-
+	cout << "Ð ÐµÐ·ÑƒÐ»ÑŒÑ‚Ð°Ñ‚ Ð°Ð»Ð³Ð¾Ñ€Ð¸Ñ‚Ð¼Ð° 1                          = " << c << endl;
+	cout << "Ð’Ñ€ÐµÐ¼Ñ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ñ Ð°Ð»Ð³Ð¾Ñ€Ð¸Ñ‚Ð¼Ð° 1                   = " << end_time - start_time << "\n\n";
 	
+
+
+	// ÐÐ»Ð³Ð¾Ñ€Ð¸Ñ‚Ð¼ 2 //
 
 	c = 0;
 	start_time = omp_get_wtime();
 	for (int n = 0; n < q; n++) {
 
-#pragma omp parallel num_threads(4) 
+#pragma omp parallel num_threads(8) 
 		{
 #pragma omp for
 
@@ -112,20 +116,23 @@ int main() {
 	end_time = omp_get_wtime();
 
 	for (int i = 0; i < N; i++)
-		for (int j = 0; j < N; j++) 
+		for (int j = 0; j < N; j++)
 			c += C[i][j] * C[i][j];
 
-	cout << "Ðåçóëüòàò àëãîðèòìà 2                 = " << c << endl;
-	cout << "Âðåìÿ âûïîëíåíèÿ àëãîðèòìà 2          = " << end_time - start_time << "\n\n";
+	cout << "Ð ÐµÐ·ÑƒÐ»ÑŒÑ‚Ð°Ñ‚ Ð°Ð»Ð³Ð¾Ñ€Ð¸Ñ‚Ð¼Ð° 2                          = " << c << endl;
+	cout << "Ð’Ñ€ÐµÐ¼Ñ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ñ Ð°Ð»Ð³Ð¾Ñ€Ð¸Ñ‚Ð¼Ð° 2                   = " << end_time - start_time << "\n\n";
 
 
+	
 
+	// ÐÐ»Ð³Ð¾Ñ€Ð¸Ñ‚Ð¼ 3 //
+	
 	c = 0;
 	start_time = omp_get_wtime();
 	for (int n = 0; n < q; n++) {
 		for (int i = 0; i < N; i++) {
 
-#pragma omp parallel num_threads(4) 
+#pragma omp parallel num_threads(8) 
 			{
 #pragma omp for
 
@@ -142,15 +149,46 @@ int main() {
 		}
 	}
 	end_time = omp_get_wtime();
-	
-	for (int i = 0; i < N; i++) 
-		for (int j = 0; j < N; j++) 
+
+	for (int i = 0; i < N; i++)
+		for (int j = 0; j < N; j++)
 			c += C[i][j] * C[i][j];
 
-	cout << "Ðåçóëüòàò àëãîðèòìà 3                 = " << c << endl;
-	cout << "Âðåìÿ âûïîëíåíèÿ àëãîðèòìà 3          = " << end_time - start_time << "\n\n\n";
+	cout << "Ð ÐµÐ·ÑƒÐ»ÑŒÑ‚Ð°Ñ‚ Ð°Ð»Ð³Ð¾Ñ€Ð¸Ñ‚Ð¼Ð° 3                          = " << c << endl;
+	cout << "Ð’Ñ€ÐµÐ¼Ñ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ñ Ð°Ð»Ð³Ð¾Ñ€Ð¸Ñ‚Ð¼Ð° 3                   = " << end_time - start_time << "\n\n";
+	
 
+	
+	// ÐŸÑ€Ð¸Ð¼ÐµÐ½ÐµÐ½Ð¸Ðµ ÑÐ¿ÐµÑ†Ð¸Ñ„Ð¸ÐºÐ°Ñ‚Ð¾Ñ€Ð° "if" //
 
+	c = 0;
+	start_time = omp_get_wtime();
+	for (int n = 0; n < q; n++) {
 
+	#pragma omp parallel if(N > 18) num_threads(8)
+		{
+	#pragma omp for
+
+			for (int i = 0; i < N; i++) {
+				for (int j = 0; j < N; j++) {
+					float sum = 0;
+
+					for (int k = 0; k < N; k++) {
+						sum += A[i][k] * B[k][j];
+					}
+
+					C[i][j] = sum;
+				}
+			}
+		}
+	}
+	end_time = omp_get_wtime();
+
+	for (int i = 0; i < N; i++)
+		for (int j = 0; j < N; j++)
+			c += C[i][j] * C[i][j];
+
+	cout << "Ð ÐµÐ·ÑƒÐ»ÑŒÑ‚Ð°Ñ‚ Ð¼Ð¾Ð´Ð¸Ñ„Ð¸Ñ†Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð½Ð¾Ð³Ð¾ Ð°Ð»Ð³Ð¾Ñ€Ð¸Ñ‚Ð¼Ð° 2        = " << c << endl;
+	cout << "Ð’Ñ€ÐµÐ¼Ñ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ñ Ð¼Ð¾Ð´Ð¸Ñ„Ð¸Ñ†Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð½Ð¾Ð³Ð¾ Ð°Ð»Ð³Ð¾Ñ€Ð¸Ñ‚Ð¼Ð° 2 = " << end_time - start_time << "\n\n";
 	return 0;
 }
